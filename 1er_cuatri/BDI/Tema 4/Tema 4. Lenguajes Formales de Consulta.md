@@ -79,4 +79,14 @@ Las operaciones fundamentales son suficientes para expresar cualquier consulta, 
 r ∩ s = r − (r − s)
 - **Reunión natural**: simplifica consultas que normalmente requieren producto cartesiano + selección. Une dos relaciones forzando que los atributo comunes tengan el mismo valor y elimina duplicados de atributos repetidos. Si no hay atributos en común, simplemente se reduce a un producto cartesiano. Un ejemplo sería la consulta de "Obtener el nombre de cada profesor con las asignaturas que enseña", aquí lo que haría la reunión natural sería buscar los ID iguales en profesor y en enseña y coger los valores nombre de profesor y su correspondiente id_asignatura en enseña para formar una nueva tabla con estos dos datos.
 - **Asignación**: se indica con "&larr;" y actúa de manera parecida a la asignación de los lenguajes de programación. Es algo similar a un =, pero de formato temporal. Es decir, guarda el resultado de una expresión en una variable temporal que se puede usar posteriormente, pero no se muestra nada al usuario. Ejemplo: temp1 &larr; R x S
-- **Reunión externa**:
+- **Reunión externa**: extensión de la operación reunión para trabajar con información ausente. Funciona de forma similar a la reunión natural pero conserva las tuplas que se perderían al realizar la reunión creando tuplas en el resultado con valores nulos. Tiene tres formas:
+	- Reunión externa *por la izquierda*: toma todas las tuplas de la relación de la izquierda que no coinciden con ninguna tupla de la relación de la derecha, las rellena con valores nulos en los demás atributos de la relación de la derecha y las añade al resultado de la reunión natural.
+	- Reunión externa *por la derecha*: simétrica a la reunión externa por la izquierda.
+	- Reunión externa *completa*: realiza ambas operaciones.
+
+### 6.1.4 Operaciones del álgebra relacional extendida
+
+Estas son operaciones del álgebra relacional con la capacidad de escribir consultas que no se pueden expresar con las operaciones básicas explicadas anteriormente.
+
+- **Proyección generalizada**: extiende la proyección permitiendo que se utilicen operaciones aritméticas o de cadenas de caracteres en la lista de proyección. Por ejemplo coger el sueldo de profesor y dividirlo entre 12 para conseguir el sueldo mensual.
+- **Agregación**: permite el uso de funciones como mínimo o el promedio sobre conjuntos de valores. Estas toman una colección de valores y devuelven como resultado un único valor. Ejemplo: función sum para el conjunto {1,5,7}, hay 3 valores pero el resultado es la suma de ellos, 13 (un único valor). Las colecciones pueden tener valores repetidos y el orden en el que aparecen no importa &rarr; *Multiconjuntos*. Los conjuntos son un caso especial de multiconjuntos en los que no se pueden repetir elementos.
