@@ -52,11 +52,15 @@ int main(int argc, char *argv[]) {
     int bytesRecibidos;
 
     while ((bytesRecibidos = recv(conectionSocket, buffer, sizeof(buffer)-1, 0)) > 0) {
-        buffer[bytesRecibidos] = '\0'; // convertir a string
+        buffer[bytesRecibidos] = '\0';
         for (int i = 0; buffer[i]; i++) {
             buffer[i] = toupper(buffer[i]);
         }
-        
+        send(conectionSocket, buffer, bytesRecibidos, 0);
+        if (send(conectionSocket, buffer, bytesRecibidos, 0) == -1) {
+            perror("Error al enviar la línea");
+            break;
+        }
     }
 
     close(conectionSocket);
