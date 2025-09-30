@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[]) {
     int serverSocket, conectionSocket;
-    char message[255] = "Has entrado al servidor\n";
+    char message[255] = "Has entrado en el servidor\n";
 
     if ((serverSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("No se pudo crear el socket");
@@ -56,7 +56,6 @@ int main(int argc, char *argv[]) {
         for (int i = 0; buffer[i]; i++) {
             buffer[i] = toupper(buffer[i]);
         }
-        send(conectionSocket, buffer, bytesRecibidos, 0);
         if (send(conectionSocket, buffer, bytesRecibidos, 0) == -1) {
             perror("Error al enviar la línea");
             break;

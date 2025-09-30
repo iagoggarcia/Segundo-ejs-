@@ -17,6 +17,8 @@ int main(int argc, char *argv[]) {
 
     printf("Introduce el nombre del archivo: ");
     scanf("%s", archiveName);
+
+    // Abrimos el archivo a leer
     archivo = fopen(archiveName, "r");
     if (archivo == NULL) {
         perror("Error abriendo el archivo\n");
@@ -41,7 +43,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    
+    // Para recibir e imprimir el mensaje de entrada al servidor:
     char message[255];
     int n = recv(clientSocket, message, sizeof(message)-1, 0);
     if (n > 0) {
@@ -49,6 +51,7 @@ int main(int argc, char *argv[]) {
     }
     printf("%s\n", message);
 
+    // Abrimos el archivo donde escribiremos las líneas en mayúscula que envía el servidor
     char linea[256];
     FILE *finalFile = fopen("fichero_final.txt", "w");
     if (finalFile == NULL) {
@@ -59,8 +62,8 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     
+    int i = 1; // simplemente para llevar un conteo de líneas que están siendo leídas
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        printf("%s", linea);
         if (send(clientSocket, linea, strlen(linea), 0) == -1) {
             perror("Error al enviar la línea");
             break;
@@ -77,8 +80,9 @@ int main(int argc, char *argv[]) {
             break;
         }
         buffer2[bytesRecibidos] = '\0';
-        printf("Respuesta del servidor: %s", buffer2);
         fprintf(finalFile, "%s", buffer2);
+        printf("Línea %d leída y escrita\n", i);
+        i++;
     }
 
     fclose(archivo);
