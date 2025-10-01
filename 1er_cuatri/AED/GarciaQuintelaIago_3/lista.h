@@ -1,8 +1,10 @@
 #ifndef LISTA_H
 #define LISTA_H
-#include "abb.h"
+//#include "abb.h"
 /** Definicion del tipo de elemento almacenado en la lista **/
 // Definir el struct y si es necesario definir constantes
+
+#define NAME_LENGTH 20
 
 typedef struct {
     char name[NAME_LENGTH];

@@ -1,5 +1,11 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include "juegodetronos.h"
+
 int main (int argc, char *argv[]) {
     char opcion;
+    TLISTA lista;
+    crearLista(&lista);
 
     do {
         printf("--------MENÚ--------\n");
@@ -7,10 +13,12 @@ int main (int argc, char *argv[]) {
         printf("l) Listado alfabético de personajes\n");
         printf("e) Eliminar personaje\n");        
         printf("s) Salir\n");
-        printf("--------------------\n");        
+        printf("--------------------\n");
+        printf("Introduce la opción: ");
+        scanf(" %c", &opcion);
         switch (opcion) {
         case 'A': case 'a':
-            
+            anhadirPersonaje(&lista);
             break;
         case 'L': case 'l':
             
