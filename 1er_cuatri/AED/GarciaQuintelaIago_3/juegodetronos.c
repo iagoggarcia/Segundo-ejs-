@@ -11,23 +11,25 @@ void anhadirPersonaje(TABB *arbol) {
     unsigned short real;
     char parent[NAME_LENGTH], sibling[NAME_LENGTH], murdered[NAME_LENGTH], married[NAME_LENGTH];
 
+    getchar();
+
     // Pregunto el nombre
     printf("Nombre: ");
-    scanf(" %s", personaje.name);
+    fgets(personaje.name, sizeof(personaje.name), stdin);
+    personaje.name[strcspn(personaje.name, "\n")] = '\0';
 
     // Comprobación de que no existe en el árbol
     TIPOELEMENTOABB aux;
     strcpy(aux.name, personaje.name);
     if (esMiembroAbb(*arbol, aux)) {
         printf("Error, el personaje ya ha sido creado\n");
-        return; // para no preguntar más datos
+        return;
     }
-
 
     // Pido el tipo de personaje y hago un switch para guardar el tipo en función de la opción elegida como entrada
     do {
         printf("Tipo de personaje (1: persona, 2: gigante, 3: lobo, 4: dragon, 5: criatura): ");
-        scanf (" %c", &tipoPersonaje);
+        scanf(" %c", &tipoPersonaje);
         switch (tipoPersonaje) {
         case '1':
             strcpy(personaje.character_type, "persona");        
@@ -43,97 +45,89 @@ void anhadirPersonaje(TABB *arbol) {
             break;
         case '5':
             strcpy(personaje.character_type, "criatura");
+            break;
         }
     } while (tipoPersonaje != '1' && tipoPersonaje != '2' && tipoPersonaje != '3' && tipoPersonaje != '4' && tipoPersonaje != '5');
+    
+    getchar(); // limpiar buffer después del scanf del tipo de personaje
 
     // Pregunto la casa
     printf("Casa (- si desconocido): ");
-    scanf(" %s", personaje.house);
+    fgets(personaje.house, sizeof(personaje.house), stdin);
+    personaje.house[strcspn(personaje.house, "\n")] = '\0'; // borro el fin de cadena del fgets
 
     // Pregunto si es de la realeza
     do {
         printf("Realeza (0/1): ");
         scanf("%hu", &real);
-
-        if (real != 0 && real != 1) {
-            printf("Error, el valor debe ser 0 o 1: ");
-        }
-        
+        if (real != 0 && real != 1)
+            printf("Error, el valor debe ser 0 o 1\n");
     } while (real != 0 && real != 1);
     personaje.royal = real;
 
+    getchar(); // limpio el buffer tras scanf
 
     // Pido los padres
     crearLista(&personaje.parents);
     TIPOELEMENTOLISTA pariente;
-
     do {
         printf("Padre/s (fin para parar): ");
-        scanf(" %s", parent);
-
-        if ((strcmp(parent, "fin") < 0) || (strcmp(parent, "fin") > 0)) {
+        fgets(parent, sizeof(parent), stdin);
+        parent[strcspn(parent, "\n")] = '\0';
+        if (strcmp(parent, "fin") != 0) {
             strcpy(pariente.name, parent);
             insertarElementoLista(&personaje.parents, finLista(personaje.parents), pariente);
         }
-
-    } while ((strcmp(parent, "fin") < 0) || (strcmp(parent, "fin") > 0));
+    } while (strcmp(parent, "fin") != 0);
 
     // Pido los hermanos
     crearLista(&personaje.siblings);
     TIPOELEMENTOLISTA hermano;
-
     do {
         printf("Hermano/a (fin para parar): ");
-        scanf(" %s", sibling);
-
-        if ((strcmp(sibling, "fin") < 0) || (strcmp(sibling, "fin") > 0)) {
+        fgets(sibling, sizeof(sibling), stdin);
+        sibling[strcspn(sibling, "\n")] = '\0';
+        if (strcmp(sibling, "fin") != 0) {
             strcpy(hermano.name, sibling);
             insertarElementoLista(&personaje.siblings, finLista(personaje.siblings), hermano);
         }
+    } while (strcmp(sibling, "fin") != 0);
 
-    } while ((strcmp(sibling, "fin") < 0) || (strcmp(sibling, "fin") > 0));
-
-    // Pido los asesinados
+    // Pido a los que mató
     crearLista(&personaje.killed);
     TIPOELEMENTOLISTA asesinado;
-
     do {
         printf("Mató a (fin para parar): ");
-        scanf(" %s", murdered);
-
-        if ((strcmp(murdered, "fin") < 0) || (strcmp(murdered, "fin") > 0)) {
+        fgets(murdered, sizeof(murdered), stdin);
+        murdered[strcspn(murdered, "\n")] = '\0';
+        if (strcmp(murdered, "fin") != 0) {
             strcpy(asesinado.name, murdered);
             insertarElementoLista(&personaje.killed, finLista(personaje.killed), asesinado);
         }
+    } while (strcmp(murdered, "fin") != 0);
 
-    } while ((strcmp(murdered, "fin") < 0) || (strcmp(murdered, "fin") > 0));
-
-    // Pido los casados/comprometidos
+    // Pido la persona con la que está casado o comprometido
     crearLista(&personaje.marriedEngaged);
     TIPOELEMENTOLISTA casado;
-
     do {
         printf("Casado/a o comprometido/a con (fin para parar): ");
-        scanf(" %s", married);
-
-        if ((strcmp(married, "fin") < 0) || (strcmp(married, "fin") > 0)) {
+        fgets(married, sizeof(married), stdin);
+        married[strcspn(married, "\n")] = '\0';
+        if (strcmp(married, "fin") != 0) {
             strcpy(casado.name, married);
             insertarElementoLista(&personaje.marriedEngaged, finLista(personaje.marriedEngaged), casado);
         }
-
-    } while ((strcmp(married, "fin") < 0) || (strcmp(married, "fin") > 0));
+    } while (strcmp(married, "fin") != 0);
 
     // Pido la descripción
     printf("Descripción: ");
-    getchar(); // para limpiar el buffer porque si no no pedía la descripción
     fgets(personaje.description, sizeof(personaje.description), stdin);
-
+    personaje.description[strcspn(personaje.description, "\n")] = '\0';
 
     insertarElementoAbb(arbol, personaje);
-
-
     printf("Personaje añadido\n");
 }
+
 
 void _imprimirLista(TLISTA lista) {
     TPOSICION pos = primeroLista(lista);
